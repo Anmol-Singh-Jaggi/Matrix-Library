@@ -2,19 +2,20 @@
 using namespace std;
 
 // Class Definition begins...
+template<typename T>
 class matrix
 {
     // Member Data types
     int rows,cols;
-    vector<vector<int> > matrix_data;
+    vector<vector<T> > matrix_data;
 
     // Friend function declarations for binary relational operators...
-    friend bool operator ==(const matrix& lhs,const matrix& rhs);
-    friend bool operator !=(const matrix& lhs,const matrix& rhs);
-    friend bool operator <(const matrix& lhs,const matrix& rhs);
-    friend bool operator >(const matrix& lhs,const matrix& rhs);
-    friend bool operator <=(const matrix& lhs,const matrix& rhs);
-    friend bool operator >=(const matrix& lhs,const matrix& rhs);
+    friend bool operator == <T>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator != <T>(const matrix& lhs,const matrix& rhs);
+    friend bool operator < <T>(const matrix& lhs,const matrix& rhs);
+    friend bool operator > <T>(const matrix& lhs,const matrix& rhs);
+    friend bool operator <= <T>(const matrix& lhs,const matrix& rhs);
+    friend bool operator >= <T>(const matrix& lhs,const matrix& rhs);
 
 public:
     matrix(const int& row=1,const int& col=1)  // Constructor
@@ -91,57 +92,67 @@ public:
 
 
 // Binary Relational Operators Definitions...
-inline bool operator ==(const matrix& lhs,const matrix& rhs)  // Binary relational operator actually implemented on its own..
+template<typename T>
+inline bool operator ==(const matrix<T>& lhs,const matrix<T>& rhs)  // Binary relational operator actually implemented on its own..
 {
     return lhs.matrix_data==rhs.matrix_data;
 }
 
-inline bool operator !=(const matrix& lhs,const matrix& rhs)  // Dependent on "=="...
+template<typename T>
+inline bool operator !=(const matrix<T>& lhs,const matrix<T>& rhs)  // Dependent on "=="...
 {
     return !(lhs==rhs);
 }
 
-inline bool operator <(const matrix& lhs,const matrix& rhs)  // Binary relational operator actually implemented on its own..
+template<typename T>
+inline bool operator <(const matrix<T>& lhs,const matrix<T>& rhs)  // Binary relational operator actually implemented on its own..
 {
     return lhs.matrix_data<rhs.matrix_data;
 }
 
-inline bool operator >(const matrix& lhs,const matrix& rhs)  // Dependent on "<"...
+template<typename T>
+inline bool operator >(const matrix<T>& lhs,const matrix<T>& rhs)  // Dependent on "<"...
 {
     return rhs<lhs;
 }
 
-inline bool operator <=(const matrix& lhs,const matrix& rhs)  // Dependent on ">"...
+template<typename T>
+inline bool operator <=(const matrix<T>& lhs,const matrix<T>& rhs)  // Dependent on ">"...
 {
     return !(lhs>rhs);
 }
 
-inline bool operator >=(const matrix& lhs,const matrix& rhs)  // Dependent on "<"...
+template<typename T>
+inline bool operator >=(const matrix<T>& lhs,const matrix<T>& rhs)  // Dependent on "<"...
 {
     return !(lhs<rhs);
 }
 
 // Binary Arithmetic Operators not modifying the LHS...
-inline matrix operator +(matrix lhs,const matrix& rhs)
+template<typename T>
+inline matrix<T> operator +(matrix<T> lhs,const matrix<T>& rhs)
 {
     lhs+=rhs;
     return lhs;
 }
 
-inline matrix operator -(matrix lhs,const matrix& rhs)
+template<typename T>
+inline matrix<T> operator -(matrix<T> lhs,const matrix<T>& rhs)
 {
     lhs-=rhs;
     return lhs;
 }
 
-inline matrix operator *(matrix lhs,const matrix& rhs)
+template<typename T>
+inline matrix<T> operator *(matrix<T> lhs,const matrix<T>& rhs)
 {
     lhs*=rhs;
     return lhs;
 }
 
 // I/O Operators...
-istream& operator>>(istream &in,matrix &m)
+template<typename T>
+istream& operator>>(istream &in,matrix<T> &m)
 {
     for(int i=0; i<m.row_count(); i++)
     {
@@ -153,7 +164,8 @@ istream& operator>>(istream &in,matrix &m)
     return in;
 }
 
-ostream& operator<<(ostream &out,const matrix &m)
+template<typename T>
+ostream& operator<<(ostream &out,const matrix<T> &m)
 {
     for(int i=0; i<m.row_count(); i++)
     {
