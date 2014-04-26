@@ -24,22 +24,22 @@ class matrix
     vector<vector<T> > matrix_data;
 
     // Friend function declarations for binary relational operators...
-    friend bool operator == <>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator != <>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator < <>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator > <>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator <= <>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator >= <>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator == <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator != <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator < <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator > <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator <= <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator >= <>(const matrix& lhs,const matrix& rhs);
 
 public:
 
     // Constrcutor...
-    matrix<T>(const int& row,const int& col,const T& value);
+    matrix(const int& row,const int& col,const T& value);
 
     // Binary Arithmetic Operators modifying the LHS...
-    matrix<T>& operator +=(const matrix<T>& rhs);
-    matrix<T>& operator -=(const matrix<T>& rhs);
-    matrix<T>& operator *=(const matrix<T>& rhs);
+    matrix& operator +=(const matrix& rhs);
+    matrix& operator -=(const matrix& rhs);
+    matrix& operator *=(const matrix& rhs);
 
     // Array Subscription Operator...
     vector<T>& operator [](const int &pos);
