@@ -1,7 +1,19 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// Class Definition begins...
+
+// Class Forward Declaration...
+template<typename T>
+class matrix;
+
+//  Declarations for Friend Functions...
+template<typename T> bool operator == (const matrix<T>& lhs,const matrix<T>& rhs);
+template<typename T> bool operator != (const matrix<T>& lhs,const matrix<T>& rhs);
+template<typename T> bool operator < (const matrix<T>& lhs,const matrix<T>& rhs);
+template<typename T> bool operator > (const matrix<T>& lhs,const matrix<T>& rhs);
+template<typename T> bool operator <= (const matrix<T>& lhs,const matrix<T>& rhs);
+template<typename T> bool operator >= (const matrix<T>& lhs,const matrix<T>& rhs);
+
 template<typename T>
 class matrix
 {
@@ -10,17 +22,17 @@ class matrix
     vector<vector<T> > matrix_data;
 
     // Friend function declarations for binary relational operators...
-    friend bool operator == <T>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator != <T>(const matrix& lhs,const matrix& rhs);
-    friend bool operator < <T>(const matrix& lhs,const matrix& rhs);
-    friend bool operator > <T>(const matrix& lhs,const matrix& rhs);
-    friend bool operator <= <T>(const matrix& lhs,const matrix& rhs);
-    friend bool operator >= <T>(const matrix& lhs,const matrix& rhs);
+    friend bool operator == <>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator != <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator < <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator > <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator <= <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator >= <>(const matrix& lhs,const matrix& rhs);
 
 public:
-    matrix(const int& row=1,const int& col=1)  // Constructor
+    matrix(const int& row=1,const int& col=1,const T& value=-1)  // Constructor
     {
-        matrix_data.resize(row,vector<int> (col,-1));
+        matrix_data.resize(row,vector<T> (col,value));
         this->rows=row;
         this->cols=col;
     }
@@ -66,15 +78,16 @@ public:
                 }
             }
         }
+        this->cols=rhs.cols;
         return (*this=result);
     }
 
-    vector<int>& operator [](const int &pos)  // Array Subscription Operator...
+    vector<T>& operator [](const int &pos)  // Array Subscription Operator...
     {
         return this->matrix_data[pos];
     }
 
-    const vector<int>& operator [](const int &pos) const  // Array Subscription Operator [ const version ]...
+    const vector<T>& operator [](const int &pos) const  // Array Subscription Operator [ const version ]...
     {
         return this->matrix_data[pos];
     }
@@ -182,5 +195,5 @@ ostream& operator<<(ostream &out,const matrix<T> &m)
 
 int main()
 {
-
+    matrix<double> xx(5,5,1.1);
 }
