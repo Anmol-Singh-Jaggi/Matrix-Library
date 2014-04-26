@@ -30,7 +30,8 @@ class matrix
 
 public:
 
-    matrix<T>(const int& row,const int& col,const T& value);  // Constructor
+    // Constrcutor...
+    matrix<T>(const int& row,const int& col,const T& value);
 
     // Binary Arithmetic Operators modifying the LHS...
     matrix<T>& operator +=(const matrix<T>& rhs);
@@ -49,7 +50,7 @@ public:
 
 // Class member Function Definitions...
 template<typename T>
-matrix<T>::matrix(const int& row=1,const int& col=1,const T& value=-1)
+matrix<T>::matrix(const int& row=1,const int& col=1,const T& value=0)
 {
     matrix_data.resize(row,vector<T> (col,value));
     this->rows=row;
@@ -131,7 +132,7 @@ int matrix<T>::col_count() const
 
 // Binary Relational Operators Definitions...
 template<typename T>
-inline bool operator ==(const matrix<T>& lhs,const matrix<T>& rhs)  // Binary relational operator actually implemented on its own..
+inline bool operator ==(const matrix<T>& lhs,const matrix<T>& rhs)   // Calls "==" operator of vector<T>...
 {
     return lhs.matrix_data==rhs.matrix_data;
 }
@@ -143,7 +144,7 @@ inline bool operator !=(const matrix<T>& lhs,const matrix<T>& rhs)  // Dependent
 }
 
 template<typename T>
-inline bool operator <(const matrix<T>& lhs,const matrix<T>& rhs)  // Binary relational operator actually implemented on its own..
+inline bool operator <(const matrix<T>& lhs,const matrix<T>& rhs)  // Calls "<" operator of vector<T>...
 {
     return lhs.matrix_data<rhs.matrix_data;
 }
@@ -168,21 +169,21 @@ inline bool operator >=(const matrix<T>& lhs,const matrix<T>& rhs)  // Dependent
 
 // Binary Arithmetic Operators not modifying the LHS...
 template<typename T>
-inline matrix<T> operator +(matrix<T> lhs,const matrix<T>& rhs)
+inline matrix<T> operator +(matrix<T> lhs,const matrix<T>& rhs)  // Dependent on "+="...
 {
     lhs+=rhs;
     return lhs;
 }
 
 template<typename T>
-inline matrix<T> operator -(matrix<T> lhs,const matrix<T>& rhs)
+inline matrix<T> operator -(matrix<T> lhs,const matrix<T>& rhs)  // // Dependent on "-="...
 {
     lhs-=rhs;
     return lhs;
 }
 
 template<typename T>
-inline matrix<T> operator *(matrix<T> lhs,const matrix<T>& rhs)
+inline matrix<T> operator *(matrix<T> lhs,const matrix<T>& rhs)  // // Dependent on "*="...
 {
     lhs*=rhs;
     return lhs;
@@ -196,7 +197,7 @@ istream& operator>>(istream &in,matrix<T> &m)
     {
         for(int j=0; j<m.col_count(); j++)
         {
-            in>>m[i][j];
+            in>>m[i][j];  // ">>" operator for "T" must be defined...
         }
     }
     return in;
@@ -209,15 +210,17 @@ ostream& operator<<(ostream &out,const matrix<T> &m)
     {
         for(int j=0; j<m.col_count(); j++)
         {
-            out<<m[i][j]<<" ";
+            out<<m[i][j]<<" ";   // "<<" operator for "T" must be defined...
         }
         out<<"\n";
     }
     return out;
 }
 
+
+// Usage..
 int main()
 {
-    matrix<double> a(5,5,0.1);
-    cout<<a;
+    matrix<double> a(5,5,0.1),b(5,5,2);
+    cout<<a+b;
 }
