@@ -1,12 +1,12 @@
-Decsription -:
+**Decsription -:**
 
 A Generic Matrix Class using C++ Templates capable of doing matrix arithmetic.
 
-Requirements -:
+**Requirements -:**
 
 GNU C++ Compiler...
 
-Installation -:
+**Installation -:**
 
 Compile using g++ .
 " g++ matrix.cpp -o matrix "
