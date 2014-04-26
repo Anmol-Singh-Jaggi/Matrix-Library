@@ -1,7 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
 // Class Forward Declaration...
 template<typename T>
 class matrix;
@@ -23,85 +22,111 @@ class matrix
 
     // Friend function declarations for binary relational operators...
     friend bool operator == <>(const matrix<T>& lhs,const matrix<T>& rhs);
-    friend bool operator != <>(const matrix& lhs,const matrix& rhs);
-    friend bool operator < <>(const matrix& lhs,const matrix& rhs);
-    friend bool operator > <>(const matrix& lhs,const matrix& rhs);
-    friend bool operator <= <>(const matrix& lhs,const matrix& rhs);
-    friend bool operator >= <>(const matrix& lhs,const matrix& rhs);
+    friend bool operator != <>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator < <>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator > <>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator <= <>(const matrix<T>& lhs,const matrix<T>& rhs);
+    friend bool operator >= <>(const matrix<T>& lhs,const matrix<T>& rhs);
 
 public:
-    matrix(const int& row=1,const int& col=1,const T& value=-1)  // Constructor
-    {
-        matrix_data.resize(row,vector<T> (col,value));
-        this->rows=row;
-        this->cols=col;
-    }
+
+    matrix<T>(const int& row,const int& col,const T& value);  // Constructor
 
     // Binary Arithmetic Operators modifying the LHS...
-    matrix& operator +=(const matrix& rhs)
-    {
-        assert(this->rows==rhs.rows&&this->cols==rhs.cols);
-        for(int i=0; i<rows; i++)
-        {
-            for(int j=0; j<cols; j++)
-            {
-                this->matrix_data[i][j]+=rhs.matrix_data[i][j];
-            }
-        }
-        return *this;
-    }
+    matrix<T>& operator +=(const matrix<T>& rhs);
+    matrix<T>& operator -=(const matrix<T>& rhs);
+    matrix<T>& operator *=(const matrix<T>& rhs);
 
-    matrix& operator -=(const matrix& rhs)
-    {
-        assert(this->rows==rhs.rows&&this->cols==rhs.cols);
-        for(int i=0; i<rows; i++)
-        {
-            for(int j=0; j<cols; j++)
-            {
-                this->matrix_data[i][j]-=rhs.matrix_data[i][j];
-            }
-        }
-        return *this;
-    }
+    // Array Subscription Operator...
+    vector<T>& operator [](const int &pos);
+    const vector<T>& operator [](const int &pos) const;
 
-    matrix& operator *=(const matrix& rhs)
-    {
-        assert(this->cols==rhs.rows);
-        matrix result(this->rows,rhs.cols);
-        for(int i=0; i<rows; i++)
-        {
-            for(int j=0; j<rhs.cols; j++)
-            {
-                for(int k=0; k<rhs.rows; k++)
-                {
-                    result[i][j]+=this->matrix_data[i][k]*rhs.matrix_data[k][j];
-                }
-            }
-        }
-        this->cols=rhs.cols;
-        return (*this=result);
-    }
-
-    vector<T>& operator [](const int &pos)  // Array Subscription Operator...
-    {
-        return this->matrix_data[pos];
-    }
-
-    const vector<T>& operator [](const int &pos) const  // Array Subscription Operator [ const version ]...
-    {
-        return this->matrix_data[pos];
-    }
-
-    int row_count() const  // Get rows...
-    {
-        return rows;
-    }
-
-    int col_count() const  // Get columns...
-    {
-        return cols;
-    }
+    // Getters...
+    int row_count() const;  // Get rows...
+    int col_count() const;  // Get columns...
 };
+
+
+// Class member Function Definitions...
+template<typename T>
+matrix<T>::matrix(const int& row=1,const int& col=1,const T& value=-1)
+{
+    matrix_data.resize(row,vector<T> (col,value));
+    this->rows=row;
+    this->cols=col;
+}
+
+template<typename T>
+matrix<T>& matrix<T>::operator +=(const matrix<T>& rhs)
+{
+    assert(this->rows==rhs.rows&&this->cols==rhs.cols);
+    for(int i=0; i<rows; i++)
+    {
+        for(int j=0; j<cols; j++)
+        {
+            this->matrix_data[i][j]+=rhs.matrix_data[i][j];
+        }
+    }
+    return *this;
+}
+
+template<typename T>
+matrix<T>& matrix<T>::operator -=(const matrix<T>& rhs)
+{
+    assert(this->rows==rhs.rows&&this->cols==rhs.cols);
+    for(int i=0; i<rows; i++)
+    {
+        for(int j=0; j<cols; j++)
+        {
+            this->matrix_data[i][j]-=rhs.matrix_data[i][j];
+        }
+    }
+    return *this;
+}
+
+template<typename T>
+matrix<T>& matrix<T>::operator *=(const matrix<T>& rhs)
+{
+    assert(this->cols==rhs.rows);
+    matrix<T> result(this->rows,rhs.cols);
+    for(int i=0; i<rows; i++)
+    {
+        for(int j=0; j<rhs.cols; j++)
+        {
+            for(int k=0; k<rhs.rows; k++)
+            {
+                result[i][j]+=this->matrix_data[i][k]*rhs.matrix_data[k][j];
+            }
+        }
+    }
+    this->cols=rhs.cols;
+    return (*this=result);
+}
+
+template<typename T>
+vector<T>& matrix<T>::operator [](const int &pos)
+{
+    return this->matrix_data[pos];
+}
+
+template<typename T>
+const vector<T>& matrix<T>::operator [](const int &pos) const
+{
+    return this->matrix_data[pos];
+}
+
+template<typename T>
+int matrix<T>::row_count() const
+{
+    return rows;
+}
+
+template<typename T>
+int matrix<T>::col_count() const
+{
+
+    return cols;
+}
 
 
 // Binary Relational Operators Definitions...
@@ -191,9 +216,8 @@ ostream& operator<<(ostream &out,const matrix<T> &m)
     return out;
 }
 
-// Class Definition ends...
-
 int main()
 {
-    matrix<double> xx(5,5,1.1);
+    matrix<double> a(5,5,0.1);
+    cout<<a;
 }
