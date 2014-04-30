@@ -19,7 +19,7 @@ template<typename T> bool operator >= (const matrix<T>& lhs,const matrix<T>& rhs
 template<typename T>
 class matrix
 {
-    // Member Data types
+    // Class Data Members...
     int rows,cols;
     vector<vector<T> > matrix_data;
 
@@ -33,7 +33,7 @@ class matrix
 
 public:
 
-    // Constrcutor...
+    // Constructor...
     matrix(const int& row,const int& col,const T& value);
 
     // Binary Arithmetic Operators modifying the LHS...
