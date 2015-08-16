@@ -1,230 +1,259 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<cassert>
+#include<vector>
+#include<stdexcept>
 using namespace std;
 
+// MATRIX BEGINS
 
-// MATRIX BEGINS...
-
-// Class Forward Declaration...
+// Class forward declaration
 template<typename T>
-class matrix;
+class Matrix;
 
-//  Declarations for Friend Functions...
-template<typename T> bool operator == ( const matrix<T>& lhs, const matrix<T>& rhs );
-template<typename T> bool operator != ( const matrix<T>& lhs, const matrix<T>& rhs );
-template<typename T> bool operator < ( const matrix<T>& lhs, const matrix<T>& rhs );
-template<typename T> bool operator > ( const matrix<T>& lhs, const matrix<T>& rhs );
-template<typename T> bool operator <= ( const matrix<T>& lhs, const matrix<T>& rhs );
-template<typename T> bool operator >= ( const matrix<T>& lhs, const matrix<T>& rhs );
+// Declarations for friend functions
+template<typename T> bool operator == ( const Matrix<T>& first, const Matrix<T>& second );
+template<typename T> bool operator != ( const Matrix<T>& first, const Matrix<T>& second );
+template<typename T> bool operator < ( const Matrix<T>& first, const Matrix<T>& second );
+template<typename T> bool operator > ( const Matrix<T>& first, const Matrix<T>& second );
+template<typename T> bool operator <= ( const Matrix<T>& first, const Matrix<T>& second );
+template<typename T> bool operator >= ( const Matrix<T>& first, const Matrix<T>& second );
 
 template<typename T>
-class matrix
+class Matrix
 {
-	// Class Data Members...
-	int rows, cols;
-	vector<vector<T> > matrix_data;
+	// Class data members
+	size_t rows, columns;
+	vector<vector<T> > data;
 
-	// Friend function declarations for binary relational operators...
-	friend bool operator == <>( const matrix& lhs, const matrix& rhs );
-	friend bool operator != <>( const matrix& lhs, const matrix& rhs );
-	friend bool operator < <>( const matrix& lhs, const matrix& rhs );
-	friend bool operator > <>( const matrix& lhs, const matrix& rhs );
-	friend bool operator <= <>( const matrix& lhs, const matrix& rhs );
-	friend bool operator >= <>( const matrix& lhs, const matrix& rhs );
+	// Friend function declarations for binary relational operators
+	friend bool operator == <>( const Matrix& first, const Matrix& second );
+	friend bool operator != <>( const Matrix& first, const Matrix& second );
+	friend bool operator < <>( const Matrix& first, const Matrix& second );
+	friend bool operator > <>( const Matrix& first, const Matrix& second );
+	friend bool operator <= <>( const Matrix& first, const Matrix& second );
+	friend bool operator >= <>( const Matrix& first, const Matrix& second );
 
 public:
 
-	// Constructor...
-	matrix( const int& row, const int& col, const T& value );
+	// Constructor
+	Matrix( const size_t& _rows, const size_t& _columns, const T& value );
 
-	// Binary Arithmetic Operators modifying the LHS...
-	matrix& operator +=( const matrix& rhs );
-	matrix& operator -=( const matrix& rhs );
-	matrix& operator *=( const matrix& rhs );
+	// Binary arithmetic operators modifying the LHS
+	Matrix& operator +=( const Matrix& second );
+	Matrix& operator -=( const Matrix& second );
+	Matrix& operator *=( const Matrix& second );
 
-	// Array Subscription Operator...
-	vector<T>& operator []( const int &pos );
-	const vector<T>& operator []( const int &pos ) const;
+	// Array subscription operator
+	vector<T>& operator []( const size_t& pos );
+	const vector<T>& operator []( const size_t& pos ) const;
 
-	// Getters...
-	int row_count() const;  // Get rows...
-	int col_count() const;  // Get columns...
+	// Getters
+	size_t GetRows() const;  // Get rows
+	size_t GetColumns() const;  // Get columns
 };
 
 
-// Class member Function Definitions...
+// Class member function definitions
 template<typename T>
-matrix<T>::matrix( const int& row = 1, const int& col = 1, const T& value = 0 )
+Matrix<T>::Matrix( const size_t& _rows, const size_t& _columns, const T& value )
 {
-	matrix_data.resize( row, vector<T> ( col, value ) );
-	this->rows = row;
-	this->cols = col;
+	if ( _rows == 0 || _columns == 0 )
+	{
+		throw invalid_argument( "The dimensions of the matrix cannot be zero!" );
+	}
+
+	this->rows = _rows;
+	this->columns = _columns;
+	data.resize( this->rows, vector<T> ( this->columns, value ) );
 }
 
 template<typename T>
-matrix<T>& matrix<T>::operator +=( const matrix<T>& rhs )
+Matrix<T>& Matrix<T>::operator +=( const Matrix<T>& second )
 {
-	assert( this->rows == rhs.rows && this->cols == rhs.cols );
-	for ( int i = 0; i < rows; i++ )
+	if ( this->rows != second.rows || this->columns != second.columns )
 	{
-		for ( int j = 0; j < cols; j++ )
+		throw domain_error( "Dimensions incompatible for the operation '+='!" );
+	}
+
+	for ( size_t i = 0; i < rows; i++ )
+	{
+		for ( size_t j = 0; j < columns; j++ )
 		{
-			this->matrix_data[i][j] += rhs.matrix_data[i][j];
+			this->data[i][j] += second.data[i][j];
 		}
 	}
+
 	return *this;
 }
 
 template<typename T>
-matrix<T>& matrix<T>::operator -=( const matrix<T>& rhs )
+Matrix<T>& Matrix<T>::operator -=( const Matrix<T>& second )
 {
-	assert( this->rows == rhs.rows && this->cols == rhs.cols );
-	for ( int i = 0; i < rows; i++ )
+	if ( this->rows != second.rows || this->columns != second.columns )
 	{
-		for ( int j = 0; j < cols; j++ )
+		throw domain_error( "Dimensions incompatible for the operation '-='!" );
+	}
+
+	for ( size_t i = 0; i < rows; i++ )
+	{
+		for ( size_t j = 0; j < columns; j++ )
 		{
-			this->matrix_data[i][j] -= rhs.matrix_data[i][j];
+			this->data[i][j] -= second.data[i][j];
 		}
 	}
+
 	return *this;
 }
 
 template<typename T>
-matrix<T>& matrix<T>::operator *=( const matrix<T>& rhs )
+Matrix<T>& Matrix<T>::operator *=( const Matrix<T>& second )
 {
-	assert( this->cols == rhs.rows );
-	matrix<T> result( this->rows, rhs.cols );
-	for ( int i = 0; i < rows; i++ )
+	if ( this->columns != second.rows )
 	{
-		for ( int j = 0; j < rhs.cols; j++ )
+		throw domain_error( "Dimensions incompatible for the operation '*='!" );
+	}
+
+	Matrix<T> result( this->rows, second.columns );
+
+	for ( size_t i = 0; i < rows; i++ )
+	{
+		for ( size_t j = 0; j < second.columns; j++ )
 		{
-			for ( int k = 0; k < rhs.rows; k++ )
+			for ( size_t k = 0; k < second.rows; k++ )
 			{
-				result[i][j] += this->matrix_data[i][k] * rhs.matrix_data[k][j];
+				result[i][j] += this->data[i][k] * second.data[k][j];
 			}
 		}
 	}
-	this->cols = rhs.cols;
+
+	this->columns = second.columns;
+
 	return ( *this = result );
 }
 
 template<typename T>
-vector<T>& matrix<T>::operator []( const int &pos )
+vector<T>& Matrix<T>::operator []( const size_t& pos )
 {
-	return this->matrix_data[pos];
+	return this->data[pos];
 }
 
 template<typename T>
-const vector<T>& matrix<T>::operator []( const int &pos ) const
+const vector<T>& Matrix<T>::operator []( const size_t& pos ) const
 {
-	return this->matrix_data[pos];
+	return this->data[pos];
 }
 
 template<typename T>
-int matrix<T>::row_count() const
+size_t Matrix<T>::GetRows() const
 {
 	return rows;
 }
 
 template<typename T>
-int matrix<T>::col_count() const
+size_t Matrix<T>::GetColumns() const
 {
-
-	return cols;
+	return columns;
 }
 
 
-// Binary Relational Operators Definitions...
+// Binary relational operators definitions
+
 template<typename T>
-inline bool operator ==( const matrix<T>& lhs, const matrix<T>& rhs ) // Calls "==" operator of vector<T>...
+bool operator ==( const Matrix<T>& first, const Matrix<T>& second )
 {
-	return lhs.matrix_data == rhs.matrix_data;
+	return first.data == second.data;
 }
 
 template<typename T>
-inline bool operator !=( const matrix<T>& lhs, const matrix<T>& rhs ) // Dependent on "=="...
+bool operator !=( const Matrix<T>& first, const Matrix<T>& second )
 {
-	return !( lhs == rhs );
+	return !( first == second );
 }
 
 template<typename T>
-inline bool operator <( const matrix<T>& lhs, const matrix<T>& rhs ) // Calls "<" operator of vector<T>...
+bool operator <( const Matrix<T>& first, const Matrix<T>& second )
 {
-	return lhs.matrix_data < rhs.matrix_data;
+	return first.data < second.data;
 }
 
 template<typename T>
-inline bool operator >( const matrix<T>& lhs, const matrix<T>& rhs ) // Dependent on "<"...
+bool operator >( const Matrix<T>& first, const Matrix<T>& second )
 {
-	return rhs < lhs;
+	return second < first;
 }
 
 template<typename T>
-inline bool operator <=( const matrix<T>& lhs, const matrix<T>& rhs ) // Dependent on ">"...
+bool operator <=( const Matrix<T>& first, const Matrix<T>& second )
 {
-	return !( lhs > rhs );
+	return !( first > second );
 }
 
 template<typename T>
-inline bool operator >=( const matrix<T>& lhs, const matrix<T>& rhs ) // Dependent on "<"...
+bool operator >=( const Matrix<T>& first, const Matrix<T>& second )
 {
-	return !( lhs < rhs );
+	return !( first < second );
 }
 
-// Binary Arithmetic Operators not modifying the LHS...
+// Binary arithmetic operators not modifying the LHS
 template<typename T>
-inline matrix<T> operator +( matrix<T> lhs, const matrix<T>& rhs ) // Dependent on "+="...
+Matrix<T> operator +( Matrix<T> first, const Matrix<T>& second )
 {
-	lhs += rhs;
-	return lhs;
-}
-
-template<typename T>
-inline matrix<T> operator -( matrix<T> lhs, const matrix<T>& rhs ) // // Dependent on "-="...
-{
-	lhs -= rhs;
-	return lhs;
+	first += second;
+	return first;
 }
 
 template<typename T>
-inline matrix<T> operator *( matrix<T> lhs, const matrix<T>& rhs ) // // Dependent on "*="...
+Matrix<T> operator -( Matrix<T> first, const Matrix<T>& second )
 {
-	lhs *= rhs;
-	return lhs;
+	first -= second;
+	return first;
 }
 
-// I/O Operators...
 template<typename T>
-istream& operator>>( istream &in, matrix<T> &m )
+Matrix<T> operator *( Matrix<T> first, const Matrix<T>& second )
 {
-	for ( int i = 0; i < m.row_count(); i++ )
+	first *= second;
+	return first;
+}
+
+// I/O operators
+template<typename T>
+istream& operator>>( istream& in, Matrix<T>& matrix )
+{
+	for ( size_t i = 0; i < matrix.GetRows(); i++ )
 	{
-		for ( int j = 0; j < m.col_count(); j++ )
+		for ( size_t j = 0; j < matrix.GetColumns(); j++ )
 		{
-			in >> m[i][j]; // ">>" operator for "T" must be defined...
+			in >> matrix[i][j];
 		}
 	}
+
 	return in;
 }
 
 template<typename T>
-ostream& operator<<( ostream &out, const matrix<T> &m )
+ostream& operator<<( ostream& out, const Matrix<T>& matrix )
 {
-	for ( int i = 0; i < m.row_count(); i++ )
+	for ( size_t i = 0; i < matrix.GetRows(); i++ )
 	{
-		for ( int j = 0; j < m.col_count(); j++ )
+		for ( size_t j = 0; j < matrix.GetColumns(); j++ )
 		{
-			out << m[i][j] << " "; // "<<" operator for "T" must be defined...
+			out << matrix[i][j] << " ";
 		}
 		out << "\n";
 	}
+
 	return out;
 }
 
-// MATRIX ENDS...
+// MATRIX ENDS
 
-// Usage..
+// Usage
 int main()
 {
-	matrix<double> a( 5, 5, 0.1 ), b( 5, 5, 2 );
-	cout << a + b;
+	Matrix<double> matrix1( 5, 5, 0.1 );
+	Matrix<double> matrix2( 5, 5, 2 );
+
+	Matrix<double> matrix3 = matrix1 + matrix2;
+	cout << matrix3;
 }
